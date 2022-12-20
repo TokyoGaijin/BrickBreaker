@@ -25,6 +25,7 @@
     <Compile Include="ball.py" />
     <Compile Include="BrickBreaker.py" />
     <Compile Include="gameBoard.py" />
+    <Compile Include="player.py" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">

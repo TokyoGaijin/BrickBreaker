@@ -7,8 +7,8 @@ class BGBricks(object):
         self.locX = locX
         self.locY = locY
         self.borderColor = cs.black["pygame"]
-        self.contourColor = cs.dark_gray["pygame"]
-        self.surfaceColor = cs.gray["pygame"]
+        self.contourColor = cs.night_gray["pygame"]
+        self.surfaceColor = cs.dark_gray["pygame"]
         self.borderRect = pygame.Rect(locX, locY, 100, 40)
         self.contourRect = pygame.Rect(locX + 5, locY + 5, 95, 35)
         self.surfaceRect = pygame.Rect(locX + 10, locY + 10, 95, 35)
