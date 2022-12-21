@@ -31,8 +31,8 @@ while inPlay:
         PLAYER.draw()
         PLAYER.updateControls()
         BALL.draw()
-        BALL.move(BALL.currentDirection)
         
+        BALL.move(BALL.currentDirection)
 
         # Collision player vs. borders
         if PLAYER.playerRect.left <= GAMEBOARD.sideRect[0].right:
@@ -41,30 +41,39 @@ while inPlay:
             PLAYER.playerRect.right = GAMEBOARD.sideRect[1].left
 
         # Collision ball vs. player
-        if BALL.ballRect.bottom >= PLAYER.playerRect.top:
-            if BALL.ballRect.left >= PLAYER.playerRect.x + 30 and BALL.ballRect.right <= PLAYER.playerRect.width - 30:
+        if BALL.ballRect.colliderect(PLAYER.playerRect):
+            if BALL.ballRect.left < PLAYER.playerRect.left + 30:
+                BALL.currentDirection = "up-left"
+            elif BALL.ballRect.left > PLAYER.playerRect.right - 30:
+                BALL.currentDirection = "up-right"
+            else:
                 BALL.currentDirection = "up"
-                BALL.speed += 1
-            if BALL.ballRect.left >= PLAYER.playerRect.x and BALL.ballRect.left <= PLAYER.playerRect.x + 30:
-                BALL.currentDirection = ("up", "left")
-                BALL.speed += 1
-            if BALL.ballRect.left <= PLAYER.playerRect.width and BALL.ballRect.right >= PLAYER.playerRect.width - 30:
-                BALL.currentDirection = ("up", "right")
-                BALL.speed += 1
+                BALL.speed += .5
 
+          
 
-
-        # Collision ball vs. border
-        if BALL.ballRect.top <= GAMEBOARD.topRect.bottom:
-            BALL.currentDirection = "down"
-            BALL.speed += 1
-        
-
-        
-
-
+        # Collision ball vs. top
+        if BALL.ballRect.colliderect(GAMEBOARD.topRect):
+            if BALL.currentDirection == "up":
+                BALL.currentDirection = "down"
+            elif BALL.currentDirection == "up-right":
+                BALL.currentDirection = "down-right"
+            elif BALL.currentDirection == "up-left":
+                BALL.currentDirection = "down-left"
+            BALL.speed += .5
             
 
+        # Collision ball vs. sides
+        for i in range(0, len(GAMEBOARD.sideRect)):
+            if BALL.ballRect.colliderect(GAMEBOARD.sideRect[i]):
+                if BALL.currentDirection == "up-right":
+                    BALL.currentDirection = "up-left"
+                elif BALL.currentDirection == "down-right":
+                    BALL.currentDirection = "down-left"
+                elif BALL.currentDirection == "up-left":
+                    BALL.currentDirection = "up-right"
+                elif BALL.currentDirection == "down-left":
+                    BALL.currentDirection = "down-right"
     
 
     for event in pygame.event.get():

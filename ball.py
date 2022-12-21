@@ -21,16 +21,16 @@ class Ball(object):
             self.ballRect.y += self.speed
         if direction == "up":
             self.ballRect.y -= self.speed
-        if direction == ("up", "left"):
+        if direction == "up-left":
             self.ballRect.y -= self.speed
             self.ballRect.x -= self.speed
-        if direction == ("up", "right"):
+        if direction == "up-right":
             self.ballRect.y -= self.speed
             self.ballRect.x += self.speed
-        if direction == ("down", "left"):
+        if direction == "down-left":
             self.ballRect.y += self.speed
             self.ballRect.x -= self.speed
-        if direction == ("down", "right"):
+        if direction == "down-right":
             self.ballRect.y += self.speed
             self.ballRect.x += self.speed
 
