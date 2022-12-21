@@ -35,6 +35,7 @@ class Brick(object):
         self.isVisible = True
 
 
+
     def updateBrick(self):
         if self.isVisible:
             if self.hitpoints == 1:
@@ -44,9 +45,9 @@ class Brick(object):
             elif self.hitpoints == 3:
                 self.color = cs.green["pygame"]
             elif self.hitpoints == 4:
-                self.color = cs.purple_rain["pygame"]
+                self.color = cs.blue["pygame"]
             elif self.hitpoints > 4 and self.hitpoints < 10:
-                self.color = cs.shit["pygame"]
+                self.color = cs.purple_rain["pygame"]
             elif self.hitpoints >= 10:
                 self.color = cs.light_gray["pygame"]
 
