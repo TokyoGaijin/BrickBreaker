@@ -46,4 +46,7 @@ class GameBoard(object):
         pygame.draw.rect(self.surface, self.borderRectColor, self.topRect)
         pygame.draw.rect(self.surface, self.borderRectColor, self.sideRect[0])
         pygame.draw.rect(self.surface, self.borderRectColor, self.sideRect[1])
-        
+
+class Level(object):
+    def __init__(self):
+        pass       

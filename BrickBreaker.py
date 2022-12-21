@@ -3,6 +3,7 @@ import colorswatch as cs
 import gameBoard
 import player
 import ball
+import brick
 
 pygame.init()
 
@@ -21,6 +22,7 @@ inPlay = True
 GAMEBOARD = gameBoard.GameBoard(SURFACE)
 PLAYER = player.Player(SURFACE)
 BALL = ball.Ball(SURFACE, 400, 250, color = cs.red["pygame"])
+BRICK = brick.Brick(SURFACE, 190, 120, cs.green["pygame"])
 
 while inPlay:
     clock.tick(FPS)
@@ -31,8 +33,11 @@ while inPlay:
         PLAYER.draw()
         PLAYER.updateControls()
         BALL.draw()
+        BRICK.draw()
         
+
         BALL.move(BALL.currentDirection)
+
 
         # Collision player vs. borders
         if PLAYER.playerRect.left <= GAMEBOARD.sideRect[0].right:
@@ -49,8 +54,23 @@ while inPlay:
             else:
                 BALL.currentDirection = "up"
                 BALL.speed += .5
-
           
+        
+        # Collision ball vs. brick
+        if BALL.ballRect.colliderect(BRICK.brickRect):
+            BRICK.hitpoints -= 1
+            BRICK.updateBrick()
+            if BALL.currentDirection == "up":
+                BALL.currentDirection = "down"
+            elif BALL.currentDirection == "up-left":
+                BALL.currentDirection = "down-left"
+            elif BALL.currentDirection == "up-right":
+                BALL.currentDirection = "down-right"
+            elif BALL.currentDirection == "down-left":
+                BALL.currentDirection = "up-left"
+            elif BALL.currentDirection == "down-right":
+                BALL.currentDirection = "up-right"
+
 
         # Collision ball vs. top
         if BALL.ballRect.colliderect(GAMEBOARD.topRect):

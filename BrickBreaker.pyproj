@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ball.py" />
+    <Compile Include="brick.py" />
     <Compile Include="BrickBreaker.py" />
     <Compile Include="gameBoard.py" />
     <Compile Include="player.py" />
