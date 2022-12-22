@@ -9,7 +9,7 @@ class Ball(object):
         self.posX = startX
         self.posY = startY
         self.color = color
-        self.speed = 2
+        self.speed = 3
         self.currentDirection = "down"
         self.ballRect = pygame.Rect(self.startX, self.startY, 15, 15)
         self.isInPlay = True

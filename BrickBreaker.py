@@ -11,7 +11,7 @@ pygame.init()
 # This is the master game file where everything will be handled at runtime
 
 sizeX = 800
-sizeY = 600
+sizeY = 700
 screenSize = (sizeX, sizeY)
 
 SURFACE = pygame.display.set_mode(screenSize)
@@ -25,6 +25,7 @@ GAMEBOARD = gameBoard.GameBoard(SURFACE)
 PLAYER = player.Player(SURFACE)
 BALL = ball.Ball(SURFACE, 400, 350, color = cs.red["pygame"])
 
+currentLevel = 1
 levelMap = ""
 BrickList = []
 bg = []
@@ -69,7 +70,7 @@ def get_room(room_number):
 def main_game():
     global BrickList, inPlay, bg
    
-    get_room(7)
+    get_room(currentLevel)
 
     def drawlevel():
         for backbrick in bg:
@@ -84,11 +85,12 @@ def main_game():
 
 
     def update():
+            
+            if len(BrickList) <= 0:
+                currentLevel += 1
+
         
-            cooldownTimer = 3300
-            
-            
-      
+
 
             BALL.move(BALL.currentDirection)
 
@@ -145,8 +147,8 @@ def main_game():
             
 
             # Collision ball vs. sides
-            for i in range(0, len(GAMEBOARD.sideRect)):
-                if BALL.ballRect.colliderect(GAMEBOARD.sideRect[i]):
+            for sides in GAMEBOARD.sideRect:
+                if BALL.ballRect.colliderect(sides):
                     if BALL.currentDirection == "up-right":
                         BALL.currentDirection = "up-left"
                     elif BALL.currentDirection == "down-right":
@@ -160,9 +162,6 @@ def main_game():
     while inPlay:
         clock.tick(FPS)
         
-        
-    
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 inPlay = False
