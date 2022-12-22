@@ -312,9 +312,6 @@ class GameBoard(object):
 
 
     def draw(self):
-        for i in range(0, len(self.bg)):
-            self.bg[i].draw()
-
         pygame.draw.rect(self.surface, self.borderRectColor, self.topRect)
         pygame.draw.rect(self.surface, self.borderRectColor, self.sideRect[0])
         pygame.draw.rect(self.surface, self.borderRectColor, self.sideRect[1])
