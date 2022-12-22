@@ -5,6 +5,7 @@ from gameBoard import BGBricks
 import player
 import ball
 from brick import Brick
+import textfont
 
 pygame.init()
 
@@ -29,6 +30,7 @@ currentLevel = 1
 levelMap = ""
 BrickList = []
 bg = []
+MyFont = textfont.TextFont(SURFACE, 20, 650, color = cs.red["pygame"], size = 6)
 
 for x in range(0, 800, 100):
     for y in range(0, 600, 40):
@@ -73,6 +75,9 @@ def main_game():
     get_room(currentLevel)
 
     def drawlevel():
+
+        MyFont.writeout("0156")
+
         for backbrick in bg:
             backbrick.draw()
         for brick in BrickList:
