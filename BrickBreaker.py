@@ -5,7 +5,7 @@ from gameBoard import BGBricks
 import player
 import ball
 from brick import Brick
-import textfont
+
 
 pygame.init()
 
@@ -30,7 +30,7 @@ currentLevel = 1
 levelMap = ""
 BrickList = []
 bg = []
-MyFont = textfont.TextFont(SURFACE, 20, 650, color = cs.red["pygame"], size = 6)
+
 
 for x in range(0, 800, 100):
     for y in range(0, 600, 40):
@@ -70,14 +70,12 @@ def get_room(room_number):
 
 
 def main_game():
-    global BrickList, inPlay, bg
+    global BrickList, inPlay, bg, currentLevel
    
-    get_room(currentLevel)
+    get_room(10)
 
     def drawlevel():
-
-        MyFont.writeout("0156")
-
+               
         for backbrick in bg:
             backbrick.draw()
         for brick in BrickList:
@@ -90,78 +88,75 @@ def main_game():
 
 
     def update():
-            
-            if len(BrickList) <= 0:
-                currentLevel += 1
+        global currentLevel
+        if len(BrickList) <= 0:
+            currentLevel += 1
 
-        
-
-
-            BALL.move(BALL.currentDirection)
+        BALL.move(BALL.currentDirection)
 
 
-            # Collision player vs. borders
-            if PLAYER.playerRect.left <= GAMEBOARD.sideRect[0].right:
-                PLAYER.playerRect.x = GAMEBOARD.sideRect[0].right
-            if PLAYER.playerRect.right > GAMEBOARD.sideRect[1].left:
-                PLAYER.playerRect.right = GAMEBOARD.sideRect[1].left
+        # Collision player vs. borders
+        if PLAYER.playerRect.left <= GAMEBOARD.sideRect[0].right:
+            PLAYER.playerRect.x = GAMEBOARD.sideRect[0].right
+        if PLAYER.playerRect.right > GAMEBOARD.sideRect[1].left:
+            PLAYER.playerRect.right = GAMEBOARD.sideRect[1].left
 
 
-            # Collision ball vs. player
-            if BALL.ballRect.colliderect(PLAYER.playerRect):
-                if BALL.ballRect.left < PLAYER.playerRect.left + 40:
-                    BALL.currentDirection = "up-left"
-                elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
-                    BALL.currentDirection = "up-right"
-                else:
-                    BALL.currentDirection = "up"
-                    BALL.speed += .5
+        # Collision ball vs. player
+        if BALL.ballRect.colliderect(PLAYER.playerRect):
+            if BALL.ballRect.left < PLAYER.playerRect.left + 40:
+                BALL.currentDirection = "up-left"
+            elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
+                BALL.currentDirection = "up-right"
+            else:
+                BALL.currentDirection = "up"
+                BALL.speed += .5
           
         
-            # Collision ball vs. brick
-            #if BALL.ballRect.colliderect(BRICK.brickRect):
-            for brick in BrickList:
-                if BALL.ballRect.colliderect(brick.brickRect):
-                    brick.hitpoints -= 1
-                    brick.updateBrick()
-                    if brick.hitpoints <= 0:
-                        BrickList.remove(brick)
-                    if BALL.currentDirection == "up":
-                        BALL.currentDirection = "down"
-                    elif BALL.currentDirection == "up-right":
-                        BALL.currentDirection = "down-right"
-                    elif BALL.currentDirection == "up-left":
-                        BALL.currentDirection = "down-left"
-                    elif BALL.currentDirection == "down-right":
-                        BALL.currentDirection = "up-right"
-                    elif BALL.currentDirection == "down-left":
-                        BALL.currentDirection = "up-left"
-                    BALL.speed += .2
-               
-
-
-            # Collision ball vs. top
-            if BALL.ballRect.colliderect(GAMEBOARD.topRect):
+        # Collision ball vs. brick
+        #if BALL.ballRect.colliderect(BRICK.brickRect):
+        for brick in BrickList:
+            if BALL.ballRect.colliderect(brick.brickRect):
+                brick.hitpoints -= 1
+                brick.updateBrick()
+                if brick.hitpoints <= 0:
+                    BrickList.remove(brick)
                 if BALL.currentDirection == "up":
                     BALL.currentDirection = "down"
                 elif BALL.currentDirection == "up-right":
                     BALL.currentDirection = "down-right"
                 elif BALL.currentDirection == "up-left":
                     BALL.currentDirection = "down-left"
-                BALL.speed += .5
+                elif BALL.currentDirection == "down-right":
+                    BALL.currentDirection = "up-right"
+                elif BALL.currentDirection == "down-left":
+                    BALL.currentDirection = "up-left"
+                BALL.speed += .2
+               
+
+
+        # Collision ball vs. top
+        if BALL.ballRect.colliderect(GAMEBOARD.topRect):
+            if BALL.currentDirection == "up":
+                BALL.currentDirection = "down"
+            elif BALL.currentDirection == "up-right":
+                BALL.currentDirection = "down-right"
+            elif BALL.currentDirection == "up-left":
+                BALL.currentDirection = "down-left"
+            BALL.speed += .5
             
 
-            # Collision ball vs. sides
-            for sides in GAMEBOARD.sideRect:
-                if BALL.ballRect.colliderect(sides):
-                    if BALL.currentDirection == "up-right":
-                        BALL.currentDirection = "up-left"
-                    elif BALL.currentDirection == "down-right":
-                        BALL.currentDirection = "down-left"
-                    elif BALL.currentDirection == "up-left":
-                        BALL.currentDirection = "up-right"
-                    elif BALL.currentDirection == "down-left":
-                        BALL.currentDirection = "down-right"
+        # Collision ball vs. sides
+        for sides in GAMEBOARD.sideRect:
+            if BALL.ballRect.colliderect(sides):
+                if BALL.currentDirection == "up-right":
+                    BALL.currentDirection = "up-left"
+                elif BALL.currentDirection == "down-right":
+                    BALL.currentDirection = "down-left"
+                elif BALL.currentDirection == "up-left":
+                    BALL.currentDirection = "up-right"
+                elif BALL.currentDirection == "down-left":
+                    BALL.currentDirection = "down-right"
 
 
     while inPlay:
