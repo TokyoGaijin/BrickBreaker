@@ -5,9 +5,10 @@ from gameBoard import BGBricks
 import player
 import ball
 from brick import Brick
-
+import writer
 
 pygame.init()
+
 
 # This is the master game file where everything will be handled at runtime
 
@@ -26,7 +27,9 @@ GAMEBOARD = gameBoard.GameBoard(SURFACE)
 PLAYER = player.Player(SURFACE)
 BALL = ball.Ball(SURFACE, 400, 350, color = cs.red["pygame"])
 
+pen = writer.Writer(SURFACE, 10, 650, color = cs.green["pygame"], size = 14)
 currentLevel = 1
+current_score = 0
 levelMap = ""
 BrickList = []
 bg = []
@@ -75,6 +78,9 @@ def main_game():
     BALL.resetBall()
 
 
+
+
+
     def drawlevel():
                
         for backbrick in bg:
@@ -87,9 +93,16 @@ def main_game():
         BALL.draw()
         GAMEBOARD.draw()
 
+        pen.write_string(f"SCORE: {current_score}")
+
+
+
 
     def update():
-        global currentLevel, lives
+        global currentLevel, lives, current_score
+
+     
+
         if len(BrickList) <= 0:
             currentLevel += 1
             BALL.resetBall()
@@ -136,6 +149,7 @@ def main_game():
                 brick.hitpoints -= 1
                 brick.updateBrick()
                 if brick.hitpoints <= 0:
+                    current_score += brick.points
                     BrickList.remove(brick)
                 if BALL.currentDirection == "up":
                     BALL.currentDirection = "down"
@@ -172,9 +186,9 @@ def main_game():
                 elif BALL.currentDirection == "down-left":
                     BALL.currentDirection = "down-right"
 
-        if BALL.ballRect.y >= sizeY:
-            BALL.resetBall()
-            PLAYER.lives -= 1
+        #if BALL.ballRect.y >= sizeY:
+        #    BALL.resetBall()
+        #    PLAYER.lives -= 1
            
 
 

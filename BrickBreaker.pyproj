@@ -27,7 +27,7 @@
     <Compile Include="BrickBreaker.py" />
     <Compile Include="gameBoard.py" />
     <Compile Include="player.py" />
-    <Compile Include="textfont.py" />
+    <Compile Include="writer.py" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
