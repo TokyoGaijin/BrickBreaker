@@ -10,11 +10,13 @@ import winsound
 import threading
 import titlescreen
 from enum import Enum
+import time
 
 class GameState(Enum):
     TITLE = 0
     IN_PLAY = 1
     GAME_OVER = 2
+    BOARD_CLEAR = 3
 
 
 def play_beep(freq = 1000):
@@ -40,7 +42,7 @@ PLAYER = player.Player(SURFACE)
 BALL = ball.Ball(SURFACE, 400, 350, color = cs.red["pygame"])
 
 pen = writer.Writer(SURFACE, 10, 650, color = cs.green["pygame"], size = 14)
-currentLevel = 8
+currentLevel = 1
 current_score = 0
 levelMap = ""
 BrickList = []
@@ -84,7 +86,7 @@ def get_room(room_number):
 
 
 def main_game():
-    global BrickList, inPlay, bg, currentLevel
+    global BrickList, inPlay, bg, currentLevel, current_score
 
     game_state = GameState.TITLE
 
@@ -125,10 +127,6 @@ def main_game():
         global currentLevel, lives, current_score
 
      
-
-        if len(BrickList) <= 0:
-            currentLevel += 1
-            BALL.resetBall()
 
         BALL.move(BALL.currentDirection)
 
@@ -248,10 +246,42 @@ def main_game():
             if PLAYER.lives < 0:
                 game_state = GameState.GAME_OVER
 
+            # Advance to next level
+            if len(BrickList) <= 0:
+                current_score += 500
+                currentLevel += 1
+                get_room(currentLevel)
+                game_state = GameState.BOARD_CLEAR
+
+
             update()
             drawlevel()
             pygame.display.update()
             SURFACE.fill(cs.black["pygame"])
+        
+
+
+        if game_state == GameState.BOARD_CLEAR:
+            currentLevel += 1
+
+            pen.write_string("LEVEL CLEAR!", posX = 300, posY = 300, size = 20, color = cs.white["pygame"])
+            pen.write_string("BONUS POINTS AWARDED: 500!", posX = 300, posY = 330, size = 20, color = cs.white["pygame"])
+            pen.write_string(f"SCORE: {current_score}", posX = 300, posY = 350, size = 20, color = cs.white["pygame"])
+            pen.write_string(f"LIVES REMAINING: {PLAYER.lives}", posX = 300, posY = 400, size = 20, color = cs.white["pygame"])
+
+            pen.write_string("Press ENTER to advance", posX =250, posY = 620, size = 20, color = cs.white["pygame"])
+
+            if keys[pygame.K_RETURN]:
+                BALL.resetBall()
+                game_state = GameState.IN_PLAY
+
+
+            #BALL.resetBall()
+            #get_room(currentLevel)
+
+            pygame.display.update()
+            SURFACE.fill(cs.black["pygame"])
+
 
 
         if game_state == GameState.GAME_OVER:
@@ -265,7 +295,10 @@ def main_game():
 
             if keys[pygame.K_RETURN]:
                 PLAYER.lives = 3
+                current_score = 0
+                currentLevel = 1
                 game_state = GameState.TITLE
+
 
 
 
@@ -277,6 +310,7 @@ def main_game():
             pen.write_string("Press SPACE BAR to begin", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
 
             if keys[pygame.K_SPACE]:
+                BALL.resetBall()
                 game_state = GameState.IN_PLAY
 
             pygame.display.update()
