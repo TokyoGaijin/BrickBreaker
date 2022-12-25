@@ -89,12 +89,8 @@ def main_game():
     global BrickList, inPlay, bg, currentLevel, current_score
 
     game_state = GameState.TITLE
-
-
-   
-    get_room(currentLevel)
-    BALL.resetBall()
-
+    dev_mode = False
+ 
 
 
 
@@ -118,8 +114,8 @@ def main_game():
             GAMEBOARD.draw()
 
             pen.write_string(f"SCORE: {current_score}")
-            pen.write_string(f"{PLAYER.lives} LIVES", posX = 690)
-            pen.write_string(f"LEVEL: {currentLevel}", posX = 350)
+            pen.write_string(f"REMAIN: {PLAYER.lives}", posX = 620)
+            pen.write_string("BreakAway", posX = 350)
 
     
 
@@ -224,7 +220,8 @@ def main_game():
 
         if BALL.ballRect.y >= sizeY:
             BALL.resetBall()
-            PLAYER.lives -= 1
+            if not dev_mode:
+                PLAYER.lives -= 1
            
 
 
@@ -240,6 +237,14 @@ def main_game():
         if keys[pygame.K_ESCAPE]:
             inPlay = False
 
+        # To enter Dev-Mode: LeftSHIFT+LeftCTRL+D
+        if keys[pygame.K_LSHIFT] and keys[pygame.K_LCTRL] and keys[pygame.K_d]:
+            if dev_mode:
+                dev_mode = False
+            else:
+                dev_mode = True
+
+
         if game_state == GameState.IN_PLAY:
             clock.tick(FPS)
         
@@ -250,8 +255,12 @@ def main_game():
             if len(BrickList) <= 0:
                 current_score += 500
                 currentLevel += 1
-                get_room(currentLevel)
+                if currentLevel >= len(GAMEBOARD.room):
+                    currentLevel = 0
+
                 game_state = GameState.BOARD_CLEAR
+
+                
 
 
             update()
@@ -262,7 +271,6 @@ def main_game():
 
 
         if game_state == GameState.BOARD_CLEAR:
-            currentLevel += 1
 
             pen.write_string("LEVEL CLEAR!", posX = 300, posY = 300, size = 20, color = cs.white["pygame"])
             pen.write_string("BONUS POINTS AWARDED: 500!", posX = 300, posY = 330, size = 20, color = cs.white["pygame"])
@@ -273,11 +281,11 @@ def main_game():
 
             if keys[pygame.K_RETURN]:
                 BALL.resetBall()
+                get_room(currentLevel)
                 game_state = GameState.IN_PLAY
 
 
-            #BALL.resetBall()
-            #get_room(currentLevel)
+            
 
             pygame.display.update()
             SURFACE.fill(cs.black["pygame"])
@@ -288,12 +296,15 @@ def main_game():
             drawlevel(isBlank = True)
 
             pen.write_string("GAME OVER", posX = (sizeX / 2) - 50, posY = sizeY / 2, size = 500)
+            pen.write_string(f"YOUR SCORE: {current_score}", posX = 300, posY = 550)
             pen.write_string("Press ENTER to start again", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
 
             pygame.display.update()
             SURFACE.fill(cs.black["pygame"])
 
             if keys[pygame.K_RETURN]:
+                BALL.resetBall()
+                BrickList = []
                 PLAYER.lives = 3
                 current_score = 0
                 currentLevel = 1
@@ -310,6 +321,8 @@ def main_game():
             pen.write_string("Press SPACE BAR to begin", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
 
             if keys[pygame.K_SPACE]:
+                BrickList = []
+                get_room(1)
                 BALL.resetBall()
                 game_state = GameState.IN_PLAY
 
