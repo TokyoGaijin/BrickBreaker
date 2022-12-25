@@ -38,7 +38,7 @@ for x in range(0, 800, 100):
 
 
 def get_room(room_number):
-    global BrickList, levelMap
+    global BrickList, levelMap, currentLevel
     posX, posY = 0, 0
     width, height = 100, 40
 
@@ -68,11 +68,12 @@ def get_room(room_number):
 
 
 
-
 def main_game():
     global BrickList, inPlay, bg, currentLevel
    
-    get_room(10)
+    get_room(currentLevel)
+    BALL.resetBall()
+
 
     def drawlevel():
                
@@ -88,11 +89,16 @@ def main_game():
 
 
     def update():
-        global currentLevel
+        global currentLevel, lives
         if len(BrickList) <= 0:
             currentLevel += 1
+            BALL.resetBall()
 
         BALL.move(BALL.currentDirection)
+
+        # Checks ball speed
+        if BALL.speed >= BALL.maxSpeed:
+            BALL.speed = BALL.maxSpeed
 
 
         # Collision player vs. borders
@@ -103,18 +109,28 @@ def main_game():
 
 
         # Collision ball vs. player
-        if BALL.ballRect.colliderect(PLAYER.playerRect):
+        if BALL.ballRect.colliderect(PLAYER.playerRect) and not PLAYER.inMotion:
+            if BALL.ballRect.bottom >= PLAYER.playerRect.top:
+                BALL.currentDirection = "up"
             if BALL.ballRect.left < PLAYER.playerRect.left + 40:
                 BALL.currentDirection = "up-left"
             elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
                 BALL.currentDirection = "up-right"
             else:
                 BALL.currentDirection = "up"
-                BALL.speed += .5
+                BALL.speed = 3
+
+
+        # Collision ball vs. player and player is in motion
+        if BALL.ballRect.colliderect(PLAYER.playerRect) and PLAYER.inMotion:
+            if BALL.ballRect.left < PLAYER.playerRect.left + 40:
+                BALL.currentDirection = "up-left"
+            elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
+                BALL.currentDirection = "up-right"
+
           
         
         # Collision ball vs. brick
-        #if BALL.ballRect.colliderect(BRICK.brickRect):
         for brick in BrickList:
             if BALL.ballRect.colliderect(brick.brickRect):
                 brick.hitpoints -= 1
@@ -132,9 +148,7 @@ def main_game():
                 elif BALL.currentDirection == "down-left":
                     BALL.currentDirection = "up-left"
                 BALL.speed += .2
-               
-
-
+                
         # Collision ball vs. top
         if BALL.ballRect.colliderect(GAMEBOARD.topRect):
             if BALL.currentDirection == "up":
@@ -158,7 +172,13 @@ def main_game():
                 elif BALL.currentDirection == "down-left":
                     BALL.currentDirection = "down-right"
 
+        if BALL.ballRect.y >= sizeY:
+            BALL.resetBall()
+            PLAYER.lives -= 1
+           
 
+
+    # The game loop
     while inPlay:
         clock.tick(FPS)
         
@@ -168,6 +188,9 @@ def main_game():
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
+            inPlay = False
+
+        if PLAYER.lives < 0:
             inPlay = False
 
         update()

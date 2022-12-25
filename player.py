@@ -13,6 +13,7 @@ class Player(object):
         self.height = 20
         self.playerRect = pygame.Rect(self.posX, self.posY, self.width, self.height)
         self.inMotion = False
+        self.lives = 3
 
 
     def moveRect(self, direction):
@@ -27,8 +28,8 @@ class Player(object):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.moveRect("left")
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-             self.moveRect("right")
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            self.moveRect("right")
         else:
             self.inMotion = False
 

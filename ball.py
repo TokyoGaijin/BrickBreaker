@@ -10,6 +10,7 @@ class Ball(object):
         self.posY = startY
         self.color = color
         self.speed = 3
+        self.maxSpeed = 10
         self.currentDirection = "down"
         self.ballRect = pygame.Rect(self.startX, self.startY, 15, 15)
         self.isInPlay = True
@@ -38,9 +39,10 @@ class Ball(object):
 
     def resetBall(self):
         self.isInPlay = True
-        self.speed = 2
+        self.speed = 3
         self.ballRect.x = self.startX
         self.ballRect.y = self.startY
+        self.move("down")
         
 
     def draw(self):
