@@ -8,6 +8,12 @@ from brick import Brick
 import writer
 import winsound
 import threading
+from enum import Enum
+
+class GameState(Enum):
+    TITLE = 0
+    IN_PLAY = 1
+    GAME_OVER = 2
 
 
 def play_beep(freq = 1000):
@@ -27,7 +33,6 @@ pygame.display.set_caption("Brick Breaker by Tokyo Trekker")
 FPS = 60
 clock = pygame.time.Clock()
 inPlay = True
-
 
 GAMEBOARD = gameBoard.GameBoard(SURFACE)
 PLAYER = player.Player(SURFACE)
@@ -79,6 +84,10 @@ def get_room(room_number):
 
 def main_game():
     global BrickList, inPlay, bg, currentLevel
+
+    game_state = GameState.GAME_OVER
+
+
    
     get_room(currentLevel)
     BALL.resetBall()
@@ -87,22 +96,29 @@ def main_game():
 
 
 
-    def drawlevel():
-               
-        for backbrick in bg:
-            backbrick.draw()
-        for brick in BrickList:
-            brick.draw()      
+    def drawlevel(isBlank = False):
+
+        if isBlank:
+            for backbrick in bg:
+                backbrick.draw()
+            GAMEBOARD.draw()
+
+        else:            
+            for backbrick in bg:
+                backbrick.draw()
+            for brick in BrickList:
+                brick.draw()      
         
-        PLAYER.draw()
-        PLAYER.updateControls()
-        BALL.draw()
-        GAMEBOARD.draw()
+            PLAYER.draw()
+            PLAYER.updateControls()
+            BALL.draw()
+            GAMEBOARD.draw()
 
-        pen.write_string(f"SCORE: {current_score}")
-        pen.write_string(f"{PLAYER.lives} LIVES", posX = 690)
-        pen.write_string(f"LEVEL: {currentLevel}", posX = 350)
+            pen.write_string(f"SCORE: {current_score}")
+            pen.write_string(f"{PLAYER.lives} LIVES", posX = 690)
+            pen.write_string(f"LEVEL: {currentLevel}", posX = 350)
 
+    
 
     def update():
         global currentLevel, lives, current_score
@@ -215,8 +231,8 @@ def main_game():
 
     # The game loop
     while inPlay:
-        clock.tick(FPS)
-        
+
+        # Exits the program nomatter what
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 inPlay = False
@@ -225,14 +241,34 @@ def main_game():
         if keys[pygame.K_ESCAPE]:
             inPlay = False
 
-        if PLAYER.lives < 0:
-            inPlay = False
+        if game_state == GameState.IN_PLAY:
+            clock.tick(FPS)
+        
+            if PLAYER.lives < 0:
+                game_state = GameState.GAME_OVER
 
-        update()
-        drawlevel()
-        pygame.display.update()
-        SURFACE.fill(cs.black["pygame"])
+            update()
+            drawlevel()
+            pygame.display.update()
+            SURFACE.fill(cs.black["pygame"])
 
+        if game_state == GameState.GAME_OVER:
+            drawlevel(isBlank = True)
+
+            pen.write_string("GAME OVER", posX = (sizeX / 2) - 50, posY = sizeY / 2, size = 500)
+
+            pygame.display.update()
+            SURFACE.fill(cs.black["pygame"])
+
+            if keys[pygame.K_SPACE]:
+                game_state = GameState.IN_PLAY
+
+
+        if game_state == GameState.TITLE:
+            pass
+        
+
+            
     
 
 
