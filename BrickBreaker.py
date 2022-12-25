@@ -34,7 +34,7 @@ PLAYER = player.Player(SURFACE)
 BALL = ball.Ball(SURFACE, 400, 350, color = cs.red["pygame"])
 
 pen = writer.Writer(SURFACE, 10, 650, color = cs.green["pygame"], size = 14)
-currentLevel = 1
+currentLevel = 8
 current_score = 0
 levelMap = ""
 BrickList = []
@@ -133,9 +133,9 @@ def main_game():
             thread.start()            
             if BALL.ballRect.bottom >= PLAYER.playerRect.top:
                 BALL.currentDirection = "up"
-            if BALL.ballRect.left < PLAYER.playerRect.left + 40:
+            if BALL.ballRect.left < PLAYER.playerRect.left + 50:
                 BALL.currentDirection = "up-left"
-            elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
+            elif BALL.ballRect.left > PLAYER.playerRect.right - 50:
                 BALL.currentDirection = "up-right"
             else:
                 BALL.currentDirection = "up"
@@ -146,9 +146,9 @@ def main_game():
         if BALL.ballRect.colliderect(PLAYER.playerRect) and PLAYER.inMotion:
             thread = threading.Thread(target=play_beep(freq = 1000))
             thread.start()
-            if BALL.ballRect.left < PLAYER.playerRect.left + 40:
+            if BALL.ballRect.left < PLAYER.playerRect.left + PLAYER.playerRect.width / 2:
                 BALL.currentDirection = "up-left"
-            elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
+            elif BALL.ballRect.left > PLAYER.playerRect.right - PLAYER.playerRect.width / 2:
                 BALL.currentDirection = "up-right"
 
           
@@ -188,23 +188,28 @@ def main_game():
             BALL.speed += .5
             
 
-        # Collision ball vs. sides
-        for sides in GAMEBOARD.sideRect:
-            if BALL.ballRect.colliderect(sides):
-                thread = threading.Thread(target=play_beep(freq = 700))
-                thread.start()
-                if BALL.currentDirection == "up-right":
-                    BALL.currentDirection = "up-left"
-                elif BALL.currentDirection == "down-right":
-                    BALL.currentDirection = "down-left"
-                elif BALL.currentDirection == "up-left":
-                    BALL.currentDirection = "up-right"
-                elif BALL.currentDirection == "down-left":
-                    BALL.currentDirection = "down-right"
 
-        #if BALL.ballRect.y >= sizeY:
-        #    BALL.resetBall()
-        #    PLAYER.lives -= 1
+        if BALL.ballRect.colliderect(GAMEBOARD.sideRect[0]):
+            thread = threading.Thread(target=play_beep(freq = 700))
+            thread.start()
+            if BALL.currentDirection == "up-left":
+                BALL.currentDirection = "up-right"
+            elif BALL.currentDirection == "down-left":
+                BALL.currentDirection = "down-right"
+
+        if BALL.ballRect.colliderect(GAMEBOARD.sideRect[1]):
+            thread = threading.Thread(target=play_beep(freq = 700))
+            thread.start()
+            if BALL.currentDirection == "up-right":
+                BALL.currentDirection = "up-left"
+            elif BALL.currentDirection == "down-right":
+                BALL.currentDirection = "down-left"
+              
+
+
+        if BALL.ballRect.y >= sizeY:
+            BALL.resetBall()
+            PLAYER.lives -= 1
            
 
 
