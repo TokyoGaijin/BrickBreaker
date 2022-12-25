@@ -17,6 +17,12 @@ class Writer(object):
         self.renderFont = pygame.font.Font(os.path.join("fonts", self.font), self.size)
 
 
-    def write_string(self, string_toWrite):
-        showtext = self.renderFont.render(string_toWrite, self.size, self.color)
-        self.surface.blit(showtext, (self.posX, self.posY))
+    def write_string(self, string_toWrite, posX = None, posY = None, size = None, color = None):
+        locals_dict = locals()
+
+        for args in ["posX", "posY", "size", "color"]:
+            if locals_dict[args] == None:
+                locals_dict[args] = getattr(self, args)
+
+        showtext = self.renderFont.render(string_toWrite, locals_dict["size"], locals_dict["color"])
+        self.surface.blit(showtext, (locals_dict["posX"], locals_dict["posY"]))

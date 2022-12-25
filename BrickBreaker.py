@@ -94,6 +94,8 @@ def main_game():
         GAMEBOARD.draw()
 
         pen.write_string(f"SCORE: {current_score}")
+        pen.write_string(f"{PLAYER.lives} LIVES", posX = 690)
+        pen.write_string(f"LEVEL: {currentLevel}", posX = 350)
 
 
 
