@@ -8,6 +8,7 @@ from brick import Brick
 import writer
 import winsound
 import threading
+import titlescreen
 from enum import Enum
 
 class GameState(Enum):
@@ -85,7 +86,7 @@ def get_room(room_number):
 def main_game():
     global BrickList, inPlay, bg, currentLevel
 
-    game_state = GameState.GAME_OVER
+    game_state = GameState.TITLE
 
 
    
@@ -252,20 +253,34 @@ def main_game():
             pygame.display.update()
             SURFACE.fill(cs.black["pygame"])
 
+
         if game_state == GameState.GAME_OVER:
             drawlevel(isBlank = True)
 
             pen.write_string("GAME OVER", posX = (sizeX / 2) - 50, posY = sizeY / 2, size = 500)
+            pen.write_string("Press ENTER to start again", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
 
             pygame.display.update()
             SURFACE.fill(cs.black["pygame"])
 
-            if keys[pygame.K_SPACE]:
-                game_state = GameState.IN_PLAY
+            if keys[pygame.K_RETURN]:
+                PLAYER.lives = 3
+                game_state = GameState.TITLE
+
 
 
         if game_state == GameState.TITLE:
-            pass
+            drawlevel(isBlank = True)
+            titlescreen.draw_title(SURFACE)
+
+            pen.write_string("A 'Breakout' Clone game by Mike Yamazaki", posX = 140, posY = 500, size = 20)
+            pen.write_string("Press SPACE BAR to begin", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
+
+            if keys[pygame.K_SPACE]:
+                game_state = GameState.IN_PLAY
+
+            pygame.display.update()
+            SURFACE.fill(cs.black["pygame"])
         
 
             
