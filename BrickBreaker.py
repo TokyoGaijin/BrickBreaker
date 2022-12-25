@@ -6,6 +6,12 @@ import player
 import ball
 from brick import Brick
 import writer
+import winsound
+import threading
+
+
+def play_beep(freq = 1000):
+    winsound.Beep(freq, 20)
 
 pygame.init()
 
@@ -98,8 +104,6 @@ def main_game():
         pen.write_string(f"LEVEL: {currentLevel}", posX = 350)
 
 
-
-
     def update():
         global currentLevel, lives, current_score
 
@@ -125,6 +129,8 @@ def main_game():
 
         # Collision ball vs. player
         if BALL.ballRect.colliderect(PLAYER.playerRect) and not PLAYER.inMotion:
+            thread = threading.Thread(target=play_beep(freq = 900))
+            thread.start()            
             if BALL.ballRect.bottom >= PLAYER.playerRect.top:
                 BALL.currentDirection = "up"
             if BALL.ballRect.left < PLAYER.playerRect.left + 40:
@@ -138,6 +144,8 @@ def main_game():
 
         # Collision ball vs. player and player is in motion
         if BALL.ballRect.colliderect(PLAYER.playerRect) and PLAYER.inMotion:
+            thread = threading.Thread(target=play_beep(freq = 1000))
+            thread.start()
             if BALL.ballRect.left < PLAYER.playerRect.left + 40:
                 BALL.currentDirection = "up-left"
             elif BALL.ballRect.left > PLAYER.playerRect.right - 40:
@@ -148,6 +156,8 @@ def main_game():
         # Collision ball vs. brick
         for brick in BrickList:
             if BALL.ballRect.colliderect(brick.brickRect):
+                thread = threading.Thread(target=play_beep(freq = 2000))
+                thread.start()
                 brick.hitpoints -= 1
                 brick.updateBrick()
                 if brick.hitpoints <= 0:
@@ -167,6 +177,8 @@ def main_game():
                 
         # Collision ball vs. top
         if BALL.ballRect.colliderect(GAMEBOARD.topRect):
+            thread = threading.Thread(target=play_beep(freq = 700))
+            thread.start()
             if BALL.currentDirection == "up":
                 BALL.currentDirection = "down"
             elif BALL.currentDirection == "up-right":
@@ -179,6 +191,8 @@ def main_game():
         # Collision ball vs. sides
         for sides in GAMEBOARD.sideRect:
             if BALL.ballRect.colliderect(sides):
+                thread = threading.Thread(target=play_beep(freq = 700))
+                thread.start()
                 if BALL.currentDirection == "up-right":
                     BALL.currentDirection = "up-left"
                 elif BALL.currentDirection == "down-right":
