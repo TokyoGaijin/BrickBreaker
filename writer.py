@@ -7,14 +7,12 @@ import colorswatch as cs
 pygame.font.init()
 
 class Writer(object):
-    def __init__(self, surface, posX, posY, color = cs.cornflower_blue["pygame"], size = 12, font = "arcade_font.ttf"):
+    def __init__(self, surface, color = cs.cornflower_blue["pygame"], size = 12, font = "arcade_font.ttf"):
         self.surface = surface
-        self.posX = posX
-        self.posY = posY
         self.color = color
-        self.size = size
         self.font = font
-        self.renderFont = pygame.font.Font(os.path.join("fonts", self.font), self.size)
+        self.size = size
+        self.renderFont = pygame.font.Font(os.path.join("fonts", self.font), size)
 
 
     def write_string(self, string_toWrite, posX = None, posY = None, size = None, color = None):

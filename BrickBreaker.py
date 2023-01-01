@@ -10,13 +10,16 @@ import winsound
 import threading
 import titlescreen
 from enum import Enum
-import time
+import scoremanager
+import name_typer
+
 
 class GameState(Enum):
     TITLE = 0
     IN_PLAY = 1
     GAME_OVER = 2
     BOARD_CLEAR = 3
+    ENTER_NAME = 4
 
 
 def play_beep(freq = 1000):
@@ -28,11 +31,11 @@ pygame.init()
 # This is the master game file where everything will be handled at runtime
 
 sizeX = 800
-sizeY = 700
+sizeY = 600
 screenSize = (sizeX, sizeY)
 
 SURFACE = pygame.display.set_mode(screenSize)
-pygame.display.set_caption("Brick Breaker by Tokyo Trekker")
+pygame.display.set_caption("BreakAway by Tokyo Trekker")
 FPS = 60
 clock = pygame.time.Clock()
 inPlay = True
@@ -41,7 +44,8 @@ GAMEBOARD = gameBoard.GameBoard(SURFACE)
 PLAYER = player.Player(SURFACE)
 BALL = ball.Ball(SURFACE, 400, 350, color = cs.red["pygame"])
 
-pen = writer.Writer(SURFACE, 10, 650, color = cs.green["pygame"], size = 14)
+pen = writer.Writer(SURFACE, color = cs.green["pygame"], size = 14)
+score_keeper = scoremanager.ScoreManager()
 currentLevel = 1
 current_score = 0
 levelMap = ""
@@ -88,9 +92,9 @@ def get_room(room_number):
 def main_game():
     global BrickList, inPlay, bg, currentLevel, current_score
 
-    game_state = GameState.TITLE
+    game_state = GameState.ENTER_NAME
     dev_mode = False
- 
+    nameTyper = name_typer.Name_Typer(SURFACE)
 
 
 
@@ -113,9 +117,9 @@ def main_game():
             BALL.draw()
             GAMEBOARD.draw()
 
-            pen.write_string(f"SCORE: {current_score}")
-            pen.write_string(f"REMAIN: {PLAYER.lives}", posX = 620)
-            pen.write_string("BreakAway", posX = 350)
+            pen.write_string(f"SCORE: {current_score}", posX = 10, posY = 3)
+            pen.write_string(f"REMAIN: {PLAYER.lives}", posX = 620, posY = 3)
+            pen.write_string(f"HIGH SCORE: {score_keeper.high_score}", posX = 300, posY = 3)
 
     
 
@@ -245,6 +249,18 @@ def main_game():
                 dev_mode = True
 
 
+
+        if game_state == GameState.ENTER_NAME:
+            clock.tick(FPS)
+            nameTyper.display_alpha(250, 250)
+            
+
+
+            pygame.display.update()
+            SURFACE.fill(cs.black["pygame"])
+
+
+
         if game_state == GameState.IN_PLAY:
             clock.tick(FPS)
         
@@ -259,6 +275,9 @@ def main_game():
                     currentLevel = 0
 
                 game_state = GameState.BOARD_CLEAR
+            
+            if current_score > score_keeper.high_score:
+                score_keeper.high_score = current_score
 
                 
 
@@ -277,7 +296,7 @@ def main_game():
             pen.write_string(f"SCORE: {current_score}", posX = 300, posY = 350, size = 20, color = cs.white["pygame"])
             pen.write_string(f"LIVES REMAINING: {PLAYER.lives}", posX = 300, posY = 400, size = 20, color = cs.white["pygame"])
 
-            pen.write_string("Press ENTER to advance", posX =250, posY = 620, size = 20, color = cs.white["pygame"])
+            pen.write_string("Press ENTER to advance", posX =250, posY = 580, size = 20, color = cs.white["pygame"])
 
             if keys[pygame.K_RETURN]:
                 BALL.resetBall()
@@ -294,15 +313,21 @@ def main_game():
 
         if game_state == GameState.GAME_OVER:
             drawlevel(isBlank = True)
+            score_keeper.show_scores()
 
-            pen.write_string("GAME OVER", posX = (sizeX / 2) - 50, posY = sizeY / 2, size = 500)
+            pen.write_string("GAME OVER", posX = (sizeX / 2) - 50, posY = 200, size = 500, color = cs.white["pygame"])
+            pen.write_string("HIGH SCORES", posX = (sizeX / 2) - 60, posY = 250, color = cs.white["pygame"])
+            pen.write_string(score_keeper.score_list[0], posX = (sizeX / 2) - 90, posY = 300, color = cs.white["pygame"])
+            pen.write_string(score_keeper.score_list[1], posX = (sizeX / 2) - 90, posY = 350, color = cs.white["pygame"])
+            pen.write_string(score_keeper.score_list[2], posX = (sizeX / 2) - 90, posY = 400, color = cs.white["pygame"])
             pen.write_string(f"YOUR SCORE: {current_score}", posX = 300, posY = 550)
-            pen.write_string("Press ENTER to start again", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
+            pen.write_string("Press ENTER to start again", posX = 210, posY = 580, size = 20, color = cs.white["pygame"])
 
             pygame.display.update()
             SURFACE.fill(cs.black["pygame"])
 
             if keys[pygame.K_RETURN]:
+                # score_keeper.register_score(current_score)
                 BALL.resetBall()
                 BrickList = []
                 PLAYER.lives = 3
@@ -316,9 +341,13 @@ def main_game():
         if game_state == GameState.TITLE:
             drawlevel(isBlank = True)
             titlescreen.draw_title(SURFACE)
+            
+            score_keeper.show_scores()
 
             pen.write_string("A 'Breakout' Clone game by Mike Yamazaki", posX = 140, posY = 500, size = 20)
-            pen.write_string("Press SPACE BAR to begin", posX = 250, posY = 620, size = 20, color = cs.white["pygame"])
+
+            pen.write_string("Press SPACE BAR to begin", posX = 250, posY = 580, size = 20, color = cs.white["pygame"])
+            pen.write_string(f"HIGH SCORE: {score_keeper.high_score}", posX = 300, posY = 650, size = 20, color = cs.golden_shower["pygame"])
 
             if keys[pygame.K_SPACE]:
                 BrickList = []

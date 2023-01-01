@@ -26,7 +26,10 @@
     <Compile Include="brick.py" />
     <Compile Include="BrickBreaker.py" />
     <Compile Include="gameBoard.py" />
+    <Compile Include="joycon.py" />
+    <Compile Include="name_typer.py" />
     <Compile Include="player.py" />
+    <Compile Include="scoremanager.py" />
     <Compile Include="titlescreen.py" />
     <Compile Include="writer.py" />
   </ItemGroup>

@@ -1,6 +1,9 @@
 import pygame
 import colorswatch as cs
 
+pygame.joystick.init()
+
+
 
 class Player(object):
     def __init__(self, surface, color = cs.tangelo["pygame"]):
@@ -32,9 +35,6 @@ class Player(object):
             self.moveRect("right")
         else:
             self.inMotion = False
-
-
-
 
 
     def draw(self):
