@@ -103,7 +103,8 @@ def main_game():
                 backbrick.draw()
             GAMEBOARD.draw()
 
-        else:            
+        else:
+
             for backbrick in bg:
                 backbrick.draw()
             for brick in BrickList:

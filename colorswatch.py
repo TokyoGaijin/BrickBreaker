@@ -49,6 +49,8 @@ blue = {"pygame": (0,0,255), "tk": "#000FF"}
 cornflower_blue = {"pygame": (100,149,237), "tk": "#6495ED"}
 sky_blue = {"pygame":(51,153,255), "tk": "#3399FF"}
 neon_blue = {"pygame": (107,255,221), "tk": "#6BFFDD"}
+purple_rain = {"pygame": (106,77,255), "tk": "#6A4DFF"}
+deep_purple = {"pygame": (1, 6, 92), "tk": "#01068E"}
 
 # Yellows
 golden_shower = {"pygame": (204,204,0), "tk": "#CCCC00"}
@@ -64,7 +66,6 @@ puke = {"pygame": (68,102,0), "tk": "#446600"}
 # Reds
 tangelo = {"pygame": (249,77,0), "tk": "#F94D00"}
 red ={"pygame": (255,0,0), "tk": "#FF0000"}
-purple_rain = {"pygame": (106,77,255), "tk": "#6A4DFF"}
 fuchsia = {"pygame": (255,25,255), "tk": "#FF19FF"}
 
 # Browns
