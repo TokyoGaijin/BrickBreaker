@@ -45,8 +45,6 @@ class Player(object):
             self.moveRect("right")
         else:
             self.inMotion = False
-        print(f"{self.speed}")
-
 
     def draw(self):
         pygame.draw.rect(self.surface, self.color, self.playerRect)
