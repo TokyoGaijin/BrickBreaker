@@ -3,6 +3,21 @@
 The current files are the present release of BreakAway.
 
 To run:
+- Click on the RELEASES folder and download the latest version (breakaway【most current date】.7z).
+- Extract files to your favorite directory.
+- Read one of the README files (either -E for English or -J for Japanese)
+- Double-click on the .exe file
+- Have a great time!
+
+日本語の使い方：
+- 最近の.7zファイルをダウンロードしてください
+- お好みなフォルダーに全部のファイルrをコピーしてください
+- READMEを読んでください（-E、英語　又は -J、日本語）
+- .exeをダブルクリック、又は他の方法をしてください
+- お楽しみください！
+
+Or, follow the directions, below:
+
 DOWNLOAD THIS REPOSITORY TO YOUR COMPUTER or CLONE IT in VISUAL STUDIO 2022 (made with Community Edition)
 >>MAKE SURE YOU HAVE ALL OF THE RELEVANT DEPENDENCIES ON YOUR SYSTEM!
 
