@@ -34,7 +34,7 @@ sizeY = 600
 screenSize = (sizeX, sizeY)
 
 SURFACE = pygame.display.set_mode(screenSize)
-pygame.display.set_caption("BreakAway by Tokyo Trekker")
+pygame.display.set_caption("BreakAway")
 FPS = 60
 clock = pygame.time.Clock()
 inPlay = True
