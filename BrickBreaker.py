@@ -11,6 +11,7 @@ import threading
 import titlescreen
 from enum import Enum
 import scoremanager
+import os
 
 
 
@@ -25,7 +26,7 @@ def play_beep(freq = 1000):
     winsound.Beep(freq, 20)
 
 pygame.init()
-
+pygame.mixer.init()
 
 # This is the master game file where everything will be handled at runtime
 
@@ -50,6 +51,8 @@ current_score = 0
 levelMap = ""
 BrickList = []
 bg = []
+pygame.mixer.music.load(os.path.join("sound", "puzzleball_bgm.mp3"))
+pygame.mixer.music.set_volume(0.25)
 
 
 for x in range(0, 800, 100):
@@ -251,9 +254,11 @@ def main_game():
 
         if game_state == GameState.IN_PLAY:
             clock.tick(FPS)
+            
         
             if PLAYER.lives < 0:
                 game_state = GameState.GAME_OVER
+                pygame.mixer.music.stop()
 
             # Advance to next level
             if len(BrickList) <= 0:
@@ -262,6 +267,7 @@ def main_game():
                 if currentLevel >= len(GAMEBOARD.room):
                     currentLevel = 0
 
+                pygame.mixer.music.stop()
                 game_state = GameState.BOARD_CLEAR
             
             if current_score > score_keeper.high_score:
@@ -289,6 +295,7 @@ def main_game():
             if keys[pygame.K_RETURN]:
                 BALL.resetBall()
                 get_room(currentLevel)
+                pygame.mixer.music.play(-1)
                 game_state = GameState.IN_PLAY
 
 
@@ -340,6 +347,7 @@ def main_game():
                 BrickList = []
                 get_room(1)
                 BALL.resetBall()
+                pygame.mixer.music.play(-1)
                 game_state = GameState.IN_PLAY
 
             pygame.display.update()
