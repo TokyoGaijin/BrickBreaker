@@ -3,18 +3,12 @@
 The current files are the present release of BreakAway.
 
 To run:
-- Click on the RELEASES folder and download the latest version (breakaway【most current date】.7z).
-- Extract files to your favorite directory.
-- Read one of the README files (either -E for English or -J for Japanese)
-- Double-click on the .exe file
-- Have a great time!
+- Download either the .7z or the .zip file on the Release panel (right side)
+- Run the .exe file and enjoy!
 
 日本語の使い方：
-- 最近の.7zファイルをダウンロードしてください
-- お好みなフォルダーに全部のファイルrをコピーしてください
-- READMEを読んでください（-E、英語　又は -J、日本語）
-- .exeをダブルクリック、又は他の方法をしてください
-- お楽しみください！
+- .7z又は.zipファイルをダウンロードして、お好みのフォルダーに展開してください
+- .exeを実行して楽しんでください
 
 Or, follow the directions, below:
 
